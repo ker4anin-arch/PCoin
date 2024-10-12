@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Coin</title>
+    <!-- Подключение CSS-стилей -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Подключение JavaScript -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Добро пожаловать, {{ user.telegram_id }}!</h1>
+        <div class="stats">
+            <p>Монеты: <span id="coins">{{ user.coins }}</span></p>
+            <p>Энергия: <span id="energy">{{ user.energy }}</span>/<span id="max_energy">{{ user.max_energy }}</span></p>
+        </div>
+        <button id="tap-button">Получить монету (1 энергия)</button>
+
+        <!-- Раздел навыков -->
+        <h2>Ваши навыки</h2>
+        <ul>
+            {% for user_skill in user.skills %}
+                <li>{{ user_skill.skill.name }} (Уровень: {{ user_skill.level }}, Доход: {{ user_skill.income }})</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Раздел покупки навыков -->
+        <h2>Доступные навыки</h2>
+        <ul>
+            {% for skill in available_skills %}
+                <li>
+                    {{ skill.name }} - Стоимость: {{ skill.cost }} монет
+                    <button class="buy-skill-button" data-skill-id="{{ skill.id }}">Купить</button>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <!-- Раздел компаний -->
+        {% if user.company %}
+            <h2>Ваша компания: {{ user.company.name }}</h2>
+            <!-- Отображение информации о компании -->
+        {% else %}
+            <h2>Вы не состоите в компании</h2>
+            <button id="create-company-button">Создать компанию</button>
+            <!-- Форма создания компании -->
+            <div id="create-company-form" style="display: none;">
+                <input type="text" id="company-name-input" placeholder="Название компании">
+                <button id="submit-company-button">Создать</button>
+            </div>
+        {% endif %}
+
+        <!-- Ссылка для приглашения друзей -->
+        <h2>Пригласить друзей</h2>
+        <p>Ваша реферальная ссылка: <a href="{{ invite_link }}">{{ invite_link }}</a></p>
+    </div>
+</body>
+</html>
