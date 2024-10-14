@@ -1,61 +1,33 @@
-from telegram import Update, Bot
-from telegram.ext import Updater, CommandHandler, CallbackContext
-from app import create_app, db
-from app.models import User
+from telegram import Bot, Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-
-# Настройка приложения Flask
-app = create_app()
-
-# Ваш Telegram-токен (замените на свой)
-TOKEN = "7842592728:AAF49trG_i35bMZ9eftIKReBJ6oinXbsDrE"
-
-def start(update: Update, context: CallbackContext):
-    try:
-        telegram_id = update.effective_user.id
-        name = update.effective_user.first_name
-
-        with app.app_context():
-            user = User.query.filter_by(telegram_id=telegram_id).first()
-            if user:
-                message = f"Добро пожаловать обратно, {user.name}! У вас {user.coins} монет."
-            else:
-                user = User(
-                    telegram_id=telegram_id,
-                    name=name,
-                    coins=300,
-                    energy=300,
-                    experience=0,
-                    income_per_hour=0
-                )
-                db.session.add(user)
-                db.session.commit()
-                message = f"Привет, {name}! Вы зарегистрированы. Вам начислено 300 монет."
-
-        context.bot.send_message(chat_id=update.effective_chat.id, text=message)
-    except Exception as e:
-        print(f"Ошибка: {e}")
-
-
-def balance(update: Update, context: CallbackContext):
-    """Отправляет пользователю его текущий баланс."""
+# Команда /start
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # Получаем ID пользователя
     telegram_id = update.effective_user.id
 
-    with app.app_context():
-        user = User.query.filter_by(telegram_id=telegram_id).first()
-        if user:
-            message = f"Ваш баланс: {user.coins} монет."
-        else:
-            message = "Вы ещё не зарегистрированы. Отправьте /start для регистрации."
+    # Формируем URL с переданным telegram_id
+    url = f"https://ker4anin-arch.github.io/PCoin/?telegram_id={telegram_id}"
 
-    # Отправляем сообщение с балансом
-    context.bot.send_message(chat_id=update.effective_chat.id, text=message)
+    # Создаём кнопку для перехода на сайт
+    keyboard = [[
+        InlineKeyboardButton("Открыть приложение", web_app={"url": url})
+    ]]
+    reply_markup = InlineKeyboardMarkup(keyboard)
 
-def main():
-    """Запуск бота."""
-    updater = Updater(TOKEN, use_context=True)
-    dispatcher = updater.dispatcher
+    # Отправляем сообщение с кнопкой
+    await update.message.reply_text(
+        "Нажмите кнопку, чтобы открыть приложение:",
+        reply_markup=reply_markup
+    )
 
-    # Обработчики команд
-    dispatcher.add_handler(CommandHandler("start", start))
-    di
+# Инициализация бота
+TOKEN = "7842592728:AAF49trG_i35bMZ9eftIKReBJ6oinXbsDrE"
+app = ApplicationBuilder().token(TOKEN).build()
+
+# Привязка команды /start
+app.add_handler(CommandHandler("start", start))
+
+# Запуск бота
+print("Бот запущен...")
+app.run_polling()

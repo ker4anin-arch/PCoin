@@ -1,0 +1,309 @@
+/* Основные стили для всего приложения */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans', sans-serif;
+    background-color: #282828;
+    color: white;
+}
+
+/* Общие стили для контейнера страницы */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    justify-content: space-between;
+    padding: 10px 15px;
+    box-sizing: border-box;
+}
+
+
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: auto; /* Сместить блок вниз в центре */
+    margin-bottom: 30px; /* Отступ от нижней части */
+    gap: 15px;
+}
+
+.coins-display {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.coins-display img {
+    width: 20px;
+    height: 20px;
+}
+
+.user-image {
+    width: 350px; /* Слегка уменьшим для адаптивности */
+    height: 350px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+
+
+
+/* Нижнее меню */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #240090;
+    padding: 15px 0;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.bottom-nav a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.bottom-nav img {
+    width: 24px;
+    height: 24px;
+}
+
+
+
+button:hover {
+    background-color: #3b0ac3;
+}
+
+.income-info {
+    display: flex;
+    align-items: center;
+    background-color: #282828; /* Фон блока */
+    border: 2px solid #FCF954; /* Обводка */
+    border-radius: 10px; /* Закругленные углы */
+    padding: 8px 15px;
+    gap: 8px;
+    font-weight: light;
+    font-size: 12px;
+    color: white;
+    position: absolute; /* Абсолютное позиционирование */
+    right: 15px; /* Отступ от правого края */
+    top: 100px; /* Регулируй значение, чтобы сместить по вертикали */
+}
+
+
+.income-amount {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.coin-icon {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* Верхняя панель с информацией о пользователе */
+.header {
+    background-color: #240090;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border-radius: 0 0 15px 15px;
+    box-sizing: border-box;
+}
+
+.header .level,
+.header .rating {
+    font-weight: bold;
+}
+
+
+/* Кнопка Airdrop */
+button.airdrop-button {
+    background-color: transparent;
+    border: 2px solid #FCF954;
+    width: 120px; /* Ширина */
+    height: 30px; /* Высота */
+    border-radius: 10px;
+    font-weight: light;
+    color: white;
+    cursor: pointer;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    padding: 8px; /* Убираем лишние отступы внутри кнопки */
+    box-sizing: border-box; /* Учитываем границы в размере */
+}
+
+
+
+.airdrop-button img {
+    width: 20px;
+    height: 20px;
+}
+
+.separator {
+    width: 1px;
+    height: 35px;
+    background-color: white;
+    margin: 5px;
+}
+
+.level, .rating, .airdrop-button {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Чтобы иконка и текст были выровнены */
+}
+
+/* Блоки с условиями */
+.condition {
+    background-color: #240090;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    width: 90%; /* Делаем ширину адаптивной */
+    text-align: center;
+}
+
+/* Нижнее меню */
+.footer-menu {
+    position: fixed;
+    bottom: 15px; /* Отступ снизу */
+    left: 15px; /* Отступ слева */
+    right: 15px; /* Отступ справа */
+    width: 400px;
+    max-width: 400px; /* Ограничиваем ширину */
+    height: 70px; /* Высота нижнего меню */
+    background-color: #240090;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+
+/* Ссылки в нижнем меню */
+.footer-menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Иконки в нижнем меню */
+.footer-menu img {
+    width: 24px;
+    height: 24px;
+}
+
+.footer-menu a:hover {
+    text-decoration: underline;
+}
+
+/* Контент страницы */
+.content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: calc(100vh - 120px); /* Учитываем высоту верхнего и нижнего блока */
+}
+/* Стили для кнопок */
+
+button:hover {
+    background-color: #3b0ac3;
+}
+
+
+
+/* Информация о монетах */
+.coin-info {
+    display: flex;
+    flex-direction: column; /* Размещаем текст над количеством и иконкой */
+    align-items: center;
+    gap: 5px;
+    font-size: 18px;
+    font-weight: light;
+    color: white;
+    gap: 8px; /* Расстояние между иконкой и текстом */
+    margin-top: 130px;
+    background-color: #282828;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.coin-amount {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.coin-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.airdrop-coin-img {
+    width: 100px;  /* Увеличиваем размер */
+    height: 100px;
+    object-fit: contain; /* Сохраняем пропорции */
+    margin: 20px auto; /* Отцентруем по вертикали и горизонтали */
+    display: block;
+}
+
+
+/* Верхняя панель */
+.top-bar {
+    background-color: #240090;
+    width: 100%;
+    max-width: 400px; /* Ограничиваем ширину */
+    height: 70px; /* Высота увеличена */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px; /* Внутренние отступы */
+    border-radius: 10px;
+    box-sizing: border-box;
+    margin-top: 15px;
+}
+
+
+
+.airdrop-info {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.airdrop-coin {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+}

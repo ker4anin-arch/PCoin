@@ -1,58 +1,55 @@
-<!DOCTYPE html>
-<html lang="ru">
+{% extends 'base.html' %}
+
+{% block title %}Главная - PCoin{% endblock %}
+
+{% block content %}
+
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Product Coin</title>
-    <!-- Подключение CSS-стилей -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <!-- Подключение JavaScript -->
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Добро пожаловать, {{ user.telegram_id }}!</h1>
-        <div class="stats">
-            <p>Монеты: <span id="coins">{{ user.coins }}</span></p>
-            <p>Энергия: <span id="energy">{{ user.energy }}</span>/<span id="max_energy">{{ user.max_energy }}</span></p>
-        </div>
-        <button id="tap-button">Получить монету (1 энергия)</button>
-
-        <!-- Раздел навыков -->
-        <h2>Ваши навыки</h2>
-        <ul>
-            {% for user_skill in user.skills %}
-                <li>{{ user_skill.skill.name }} (Уровень: {{ user_skill.level }}, Доход: {{ user_skill.income }})</li>
-            {% endfor %}
-        </ul>
-
-        <!-- Раздел покупки навыков -->
-        <h2>Доступные навыки</h2>
-        <ul>
-            {% for skill in available_skills %}
-                <li>
-                    {{ skill.name }} - Стоимость: {{ skill.cost }} монет
-                    <button class="buy-skill-button" data-skill-id="{{ skill.id }}">Купить</button>
-                </li>
-            {% endfor %}
-        </ul>
-
-        <!-- Раздел компаний -->
-        {% if user.company %}
-            <h2>Ваша компания: {{ user.company.name }}</h2>
-            <!-- Отображение информации о компании -->
-        {% else %}
-            <h2>Вы не состоите в компании</h2>
-            <button id="create-company-button">Создать компанию</button>
-            <!-- Форма создания компании -->
-            <div id="create-company-form" style="display: none;">
-                <input type="text" id="company-name-input" placeholder="Название компании">
-                <button id="submit-company-button">Создать</button>
-            </div>
-        {% endif %}
-
-        <!-- Ссылка для приглашения друзей -->
-        <h2>Пригласить друзей</h2>
-        <p>Ваша реферальная ссылка: <a href="{{ invite_link }}">{{ invite_link }}</a></p>
+    <div class="top-bar">
+        <div class="level">Level: Junior</div>
+        <div class="separator"></div>
+        <div class="rating">Рейтинг: 15</div>
+        <div class="separator"></div>
+        <button class="airdrop-button" onclick="window.location.href='/airdrop'">
+            <img src="/static/images/coin.png" alt="Coin" class="coin-icon"> Airdrop
+        </button>
     </div>
+    <div class="income-info">
+        <span>Доход в час</span>
+        <div class="income-amount">
+            <img src="/static/images/coin.png" alt="Coin Icon" class="coin-icon">
+            <span>50000</span>
+        </div>
+    </div>
+
+
+    <div class="user-info">
+        <div class="coin-info">
+            <span>Всего монет</span>
+            <div class="coin-amount">
+            <img src="/static/images/coin.png" alt="Coin" class="coin-icon">
+            <span>50000</span>
+        </div>
+    </div>
+        <img src="/static/images/character.png" alt="Character" class="user-image" onclick="handleCharacterClick()">
+    </div>
+
 </body>
 </html>
+
+<script>
+function handleCharacterClick() {
+    alert("Персонаж нажат!");
+}
+</script>
+
+
+{% endblock %}

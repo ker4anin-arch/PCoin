@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Дашборд - PCoin{% endblock %}
+
+{% block content %}
+<div style="background-color: #240090; padding: 10px;">
+    <h1>Product Coin</h1>
+    <p>Дата: TBA</p>
+    <h2>Условия</h2>
+    <div>Друзей: Мин. 2, у вас 0</div>
+    <div>Product Coins: Мин. 50000, у вас {{ user.coins }}</div>
+    <div>Другое: TBA</div>
+</div>
+{% endblock %}

@@ -1,17 +1,18 @@
-from . import db
+from .database import db
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    telegram_id = db.Column(db.Integer, unique=True, nullable=False)
-    name = db.Column(db.String(50), nullable=False)
-    level = db.Column(db.String(20), default="Junior")
-    coins = db.Column(db.Integer, default=300)
-    energy = db.Column(db.Integer, default=300)
-    experience = db.Column(db.Integer, default=0)
-    income_per_hour = db.Column(db.Integer, default=0)
-    friends = db.Column(db.PickleType, default=list)
-    skills = db.Column(db.PickleType, default=dict)
-    tasks = db.Column(db.PickleType, default=list)
+    telegram_id = db.Column(db.String(50), unique=True, nullable=False)
+    name = db.Column(db.String(100))
+    coins = db.Column(db.Integer, default=0)
+    energy = db.Column(db.Integer, default=100)
+    level = db.Column(db.String(50), default='Junior')
+
+
+
+    def __repr__(self):
+        return f'<User {self.name}>'
+
 
     def to_dict(self):
         return {
