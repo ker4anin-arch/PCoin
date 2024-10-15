@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="skills-content">
+    <h2 class="skills-title">Умения</h2>
+
+    <div class="coin-info">
+        <span>Всего монет:</span>
+        <div class="coin-amount">
+            <img src="/static/images/coin.png" alt="Coin" class="coin-icon">
+            <span>{{ user_tokens }}</span>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button onclick="showSkills('product')">Продукт</button>
+        <button onclick="showSkills('brand')">Бренд</button>
+        <button onclick="showSkills('health')">Здоровье</button>
+        <button onclick="showSkills('development')">Развитие</button>
+        <button onclick="showSkills('wealth')">Состояние</button>
+    </div>
+
+    <div id="skills-container" class="skills-container">
+        {% for skill in skills %}
+        <div class="skill-card">
+            <div class="skill-info">
+                <p>{{ skill.name }}</p>
+                <p>Доход в час: {{ skill.income }}</p>
+                <hr class="separator">
+                <div class="skill-bottom">
+                    <div class="skill-level">
+                        <p>Lvl {{ skill.level }}</p>
+                    </div>
+                    <div class="skill-cost">
+                        <img src="/static/images/coin.png" alt="Coin" class="coin-icon">
+                        <span>{{ skill.cost }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

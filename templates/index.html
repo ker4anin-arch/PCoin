@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная - PCoin{% endblock %}
+
+{% block content %}
+    <div class="income-info">
+        <span>Доход в час</span>
+        <div class="income-amount">
+            <img src="/static/images/coin.png" alt="Coin Icon" class="coin-icon">
+            <span>50000</span>
+        </div>
+    </div>
+
+    <div class="user-info">
+        <div class="coin-info">
+            <span>Всего монет</span>
+            <div class="coin-amount">
+                <img src="/static/images/coin.png" alt="Coin" class="coin-icon">
+                <span>50000</span>
+            </div>
+        </div>
+
+        <img src="/static/images/character.png" alt="Character" class="user-image" onclick="handleCharacterClick()">
+    </div>
+
+    <script>
+    function handleCharacterClick() {
+        alert("Персонаж нажат!");
+    }
+    </script>
+{% endblock %}

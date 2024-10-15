@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Nova+Square&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>{% block title %}PCoin{% endblock %}</title>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="level">Level: Junior</div>
+        <div class="separator-small"></div>
+        <div class="rating">Рейтинг: 15</div>
+        <div class="separator-small"></div>
+        <button class="airdrop-button" onclick="window.location.href='/airdrop'">
+            <img src="/static/images/coin.png" alt="Coin" class="coin-icon"> Airdrop
+        </button>
+    </div>
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <div class="footer-menu">
+        <a href="/"><i class="fas fa-gamepad"></i> Игра</a>
+        <a href="/skills"><i class="fas fa-brain"></i> Умения</a>
+        <a href="#"><i class="fas fa-users"></i> Друзья</a>
+        <a href="#"><i class="fas fa-tasks"></i> Задания</a>
+    </div>
+
+</body>
+</html>

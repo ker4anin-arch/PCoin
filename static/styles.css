@@ -1,0 +1,512 @@
+/* Основные стили для всего приложения */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans', sans-serif;
+    background-color: #282828;
+    color: white;
+}
+
+/* Общие стили для контейнера страницы */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    justify-content: space-between;
+    padding: 10px 15px;
+    box-sizing: border-box;
+}
+
+
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 130px;
+    margin-bottom: 0px; /* Отступ от нижней части */
+    gap: 15px;
+}
+
+.coins-display {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.coins-display img {
+    width: 20px;
+    height: 20px;
+}
+
+.user-image {
+    width: 350px; /* Слегка уменьшим для адаптивности */
+    height: 350px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 0;
+}
+
+
+
+
+/* Нижнее меню */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #240090;
+    padding: 15px 0;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.bottom-nav a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.bottom-nav img {
+    width: 24px;
+    height: 24px;
+}
+
+
+
+button:hover {
+    background-color: #3b0ac3;
+}
+
+.income-info {
+    display: flex;
+    align-items: center;
+    background-color: #282828; /* Фон блока */
+    border: 2px solid #FCF954; /* Обводка */
+    border-radius: 10px; /* Закругленные углы */
+    padding: 8px 15px;
+    gap: 8px;
+    font-weight: light;
+    font-size: 12px;
+    color: white;
+    position: absolute; /* Абсолютное позиционирование */
+    right: 15px; /* Отступ от правого края */
+    top: 100px; /* Регулируй значение, чтобы сместить по вертикали */
+}
+
+
+.income-amount {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.coin-icon {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* Верхняя панель с информацией о пользователе */
+.header {
+    background-color: #240090;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border-radius: 0 0 15px 15px;
+    box-sizing: border-box;
+}
+
+.header .level,
+.header .rating {
+    font-weight: bold;
+}
+
+
+/* Кнопка Airdrop */
+button.airdrop-button {
+    font-family: 'Nova Square', sans-serif;
+    background-color: transparent;
+    border: 2px solid #FCF954;
+    width: 120px; /* Ширина */
+    height: 30px; /* Высота */
+    border-radius: 10px;
+    font-weight: light;
+    color: white;
+    cursor: pointer;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    padding: 8px; /* Убираем лишние отступы внутри кнопки */
+    box-sizing: border-box; /* Учитываем границы в размере */
+}
+.airdrop-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    gap: 15px;
+}
+
+.airdrop-title {
+    font-family: 'Nova Square', sans-serif;
+    font-size: 24px;
+    margin-bottom: 10px;
+    margin-top: 0px;
+}
+
+.airdrop-info {
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+    font-family: 'Nova Square', sans-serif;
+    margin-bottom: 0px; /* Отступ между датой и значением */
+}
+
+.airdrop-icon img {
+    width: 150px;
+    height: 150px;
+    margin-bottom: -20px; /* Отступ между иконкой и заголовком */
+    margin-top: 46px;
+}
+
+.airdrop-label, .airdrop-value {
+    font-size: 18px;
+}
+
+.airdrop-block {
+    width: 400px;
+    height: 40px;
+    background-color: #190061;
+    border-radius: 10px;
+    color: white;
+    display: flex;
+    justify-content: space-between; /* Выравниваем содержимое */
+    align-items: center;
+    padding: 0px;
+    font-family: 'Nova Square', sans-serif;
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.label {
+    text-align: left;
+}
+
+.value {
+    text-align: right;
+}
+
+.airdrop-button img {
+    width: 20px;
+    height: 20px;
+}
+
+/* Горизонтальный разделитель для карточек */
+.separator {
+    width: 160px; /* Ширина разделителя */
+    height: 2px;  /* Высота разделителя */
+    background-color: white;
+    border: none; /* Убираем стандартную границу */
+    margin: 5px 0; /* Отступы сверху и снизу */
+}
+
+
+.level, .rating, .airdrop-button {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Чтобы иконка и текст были выровнены */
+}
+
+/* Блоки с условиями */
+.condition {
+    background-color: #240090;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    width: 90%; /* Делаем ширину адаптивной */
+    text-align: center;
+}
+
+/* Нижнее меню */
+.footer-menu {
+    position: fixed;
+    bottom: 15px; /* Отступ снизу */
+    left: 15px; /* Отступ слева */
+    right: 15px; /* Отступ справа */
+    width: 400px;
+    max-width: 400px; /* Ограничиваем ширину */
+    height: 70px; /* Высота нижнего меню */
+    background-color: #240090;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+
+/* Ссылки в нижнем меню */
+.footer-menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Иконки в нижнем меню */
+.footer-menu img {
+    width: 24px;
+    height: 24px;
+}
+
+.footer-menu a:hover {
+    text-decoration: underline;
+}
+
+/* Контент страницы */
+.content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+}
+/* Стили для кнопок */
+
+button:hover {
+    background-color: #3b0ac3;
+}
+
+
+
+/* Информация о монетах */
+.coin-info {
+    display: flex;
+    flex-direction: column; /* Размещаем текст над количеством и иконкой */
+    align-items: center;
+    gap: 5px;
+    font-size: 18px;
+    font-weight: light;
+    color: white;
+    gap: 8px; /* Расстояние между иконкой и текстом */
+    margin-top: 0px;
+    background-color: #282828;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.coin-amount {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.coin-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.airdrop-coin-img {
+    width: 100px;  /* Увеличиваем размер */
+    height: 100px;
+    object-fit: contain; /* Сохраняем пропорции */
+    margin: 20px auto; /* Отцентруем по вертикали и горизонтали */
+    display: block;
+}
+
+
+/* Верхняя панель */
+.top-bar {
+    position: center;
+    background-color: #240090;
+    width: 100%;
+    max-width: 400px; /* Ограничиваем ширину */
+    height: 70px; /* Высота увеличена */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px; /* Внутренние отступы */
+    border-radius: 10px;
+    box-sizing: border-box;
+    margin-top: 15px;
+    margin-left: 15px;
+}
+
+.airdrop-info {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.airdrop-coin {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+}
+
+/* Специальный сепаратор для верхнего блока */
+.separator-small {
+    width: 1px;  /* Вертикальный разделитель */
+    height: 35px;
+    background-color: white;
+    margin: 0 15px;
+}
+
+/* Контейнер для страницы "Умения" */
+.skills-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-height: calc(100vh - 120px); /* Учитываем верхний и нижний блоки */
+    padding: 0;
+}
+
+/* Заголовок "Умения" */
+.skills-title {
+    font-size: 24px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* Табы */
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    width: 400px;
+    height: 40px;
+    background-color: #240090;
+    border-radius: 10px;
+    margin: 10px 0;
+}
+
+.tabs button {
+    flex-grow: 1;
+    font-size: 14px;
+    background-color: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
+.tabs button:hover,
+.tabs button.active {
+    background-color: rgba(53, 0, 211, 0.5);
+}
+/* Карточки умений */
+.skills-container {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+.skill-card {
+    width: 190px;
+    height: 100px;
+    background-color: #3500D3;
+    border-radius: 10px;
+    box-shadow: 3px 3px 2px rgba(245, 245, 245, 0.4); /* Тень */
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.skill-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 0; /* Убираем все внешние отступы */
+    padding: 0;
+
+}
+
+.skill-info p {
+    margin: 0; /* Убираем отступы для текста */
+    padding: 0;
+    font-size: 12px;
+    text-align: right;
+}
+
+.separator {
+    width: 160px;
+    height: 1px;
+    background-color: white;
+    border: none;
+    margin: 5px 0;
+}
+.skill-bottom {
+    display: flex;
+    justify-content: space-between; /* Разделяет элементы по краям */
+    align-items: center;
+    gap: 5px; /* Расстояние между иконкой и текстом */
+    width: 100%; /* Занимает всю ширину блока */
+}
+
+.skill-cost {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Текст с монетой выравнивается вправо */
+    gap: 5px;
+}
+
+.skill-cost img {
+    width: 20px;
+    height: 20px;
+}
+
+.skill-level {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Левое выравнивание */
+    gap: 5px;
+}
+
+.skill-icon {
+    width: 20px !important;
+    height: 20px !important;
+    object-fit: contain;
+    margin: 0 !important;
+    padding: 0 !important; /* Добавляем на случай, если padding влияет на расположение */
+    display: flex; /* Убедитесь, что элемент ведет себя как блочный элемент */
+}
+.skill-text {
+    font-size: 12px;
+    color: white;
+    margin-left: 5px;
+    display: block;
+    display: flex;
+}
+
+.coin-icon {
+    width: 20px;
+    height: 20px;
+}
