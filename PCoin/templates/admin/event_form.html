@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Редактировать' if event else 'Создать' }} событие — Админка{% endblock %}
+
+{% block content %}
+<div class="admin-layout">
+    <div class="admin-header">
+        <div class="admin-header-left">
+            <a href="{{ url_for('main.admin_events', key=key) }}" class="btn-ghost btn-sm">
+                <i class="fas fa-arrow-left"></i> Назад
+            </a>
+            <h1 class="admin-title">
+                <i class="fas fa-{{ 'pen' if event else 'plus-circle' }}"></i>
+                {{ 'Редактировать событие' if event else 'Новое событие' }}
+            </h1>
+        </div>
+    </div>
+
+    <form method="POST" class="event-form">
+        <!-- Title -->
+        <div class="form-group">
+            <label class="form-label" for="title">Название <span class="required">*</span></label>
+            <input type="text" id="title" name="title" class="form-input" required
+                   value="{{ event.title if event else '' }}"
+                   placeholder="Например: AMA с командой PCoin">
+        </div>
+
+        <!-- Category -->
+        <div class="form-group">
+            <label class="form-label" for="category_id">Категория</label>
+            <select id="category_id" name="category_id" class="form-select">
+                <option value="">— Без категории —</option>
+                {% for cat in categories %}
+                <option value="{{ cat.id }}"
+                    {% if event and event.category_id == cat.id %}selected{% endif %}
+                    data-color="{{ cat.color }}">
+                    {{ cat.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Dates row -->
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="start_datetime">Начало <span class="required">*</span></label>
+                <input type="datetime-local" id="start_datetime" name="start_datetime" class="form-input" required
+                       value="{{ event.start_datetime.strftime('%Y-%m-%dT%H:%M') if event and event.start_datetime else '' }}">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="end_datetime">Конец <span class="muted">(необязательно)</span></label>
+                <input type="datetime-local" id="end_datetime" name="end_datetime" class="form-input"
+                       value="{{ event.end_datetime.strftime('%Y-%m-%dT%H:%M') if event and event.end_datetime else '' }}">
+            </div>
+        </div>
+
+        <!-- Online toggle -->
+        <div class="form-group form-check-group">
+            <label class="form-check">
+                <input type="checkbox" name="is_online" id="isOnline"
+                       {% if event and event.is_online %}checked{% endif %}
+                       onchange="toggleLocation()">
+                <span class="checkmark"></span>
+                <i class="fas fa-wifi"></i> Онлайн-событие
+            </label>
+            <label class="form-check">
+                <input type="checkbox" name="is_free" id="isFree"
+                       {% if not event or event.is_free %}checked{% endif %}>
+                <span class="checkmark"></span>
+                <i class="fas fa-gift"></i> Бесплатно
+            </label>
+        </div>
+
+        <!-- Location -->
+        <div class="form-group" id="locationGroup">
+            <label class="form-label" for="location">Место проведения</label>
+            <input type="text" id="location" name="location" class="form-input"
+                   value="{{ event.location if event else '' }}"
+                   placeholder="Например: Москва, ул. Пушкина, 1 — или ссылка на Zoom">
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+            <label class="form-label" for="description">Описание</label>
+            <textarea id="description" name="description" class="form-textarea" rows="5"
+                      placeholder="Расскажите подробнее о событии...">{{ event.description if event else '' }}</textarea>
+        </div>
+
+        <!-- Meme section -->
+        <div class="form-group meme-section">
+            <label class="form-label">
+                🐸 Мем события <span class="muted">(необязательно)</span>
+            </label>
+            <p class="form-hint">Мем будет показан пользователям при открытии события — для хайпа!</p>
+
+            <input type="url" id="meme_url" name="meme_url" class="form-input"
+                   value="{{ event.meme_url if event else '' }}"
+                   placeholder="https://i.imgflip.com/...">
+
+            <div class="meme-preview-wrap" id="memePreviewWrap"
+                 style="{{ '' if (event and event.meme_url) else 'display:none;' }}">
+                <img class="meme-preview-img" id="memePreviewImg"
+                     src="{{ event.meme_url if event and event.meme_url else '' }}" alt="preview">
+                <button type="button" class="btn-ghost btn-sm" onclick="clearMeme()">
+                    <i class="fas fa-times"></i> Убрать
+                </button>
+            </div>
+
+            <p class="form-hint" style="margin-top:12px;">Или выбери из классики:</p>
+            <div class="meme-picker">
+                {% for meme in preset_memes %}
+                <button type="button" class="meme-preset-btn"
+                        data-url="{{ meme.url }}"
+                        onclick="selectMeme('{{ meme.url }}')"
+                        title="{{ meme.name }}">
+                    <img src="{{ meme.url }}" alt="{{ meme.name }}" loading="lazy">
+                    <span>{{ meme.name }}</span>
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="form-actions">
+            <button type="submit" class="btn-primary btn-lg">
+                <i class="fas fa-save"></i>
+                {{ 'Сохранить изменения' if event else 'Создать событие' }}
+            </button>
+            <a href="{{ url_for('main.admin_events', key=key) }}" class="btn-ghost btn-lg">
+                Отмена
+            </a>
+        </div>
+    </form>
+</div>
+
+<script>
+function toggleLocation() {
+    const online = document.getElementById('isOnline').checked;
+    const locGroup = document.getElementById('locationGroup');
+    const locInput = document.getElementById('location');
+    locGroup.style.opacity = online ? '0.4' : '1';
+    locInput.placeholder = online
+        ? 'Ссылка на трансляцию (Zoom, YouTube...)'
+        : 'Например: Москва, ул. Пушкина, 1';
+}
+
+function selectMeme(url) {
+    document.getElementById('meme_url').value = url;
+    document.getElementById('memePreviewImg').src = url;
+    document.getElementById('memePreviewWrap').style.display = 'flex';
+    document.querySelectorAll('.meme-preset-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelector(`.meme-preset-btn[data-url="${url}"]`).classList.add('selected');
+}
+
+function clearMeme() {
+    document.getElementById('meme_url').value = '';
+    document.getElementById('memePreviewWrap').style.display = 'none';
+    document.querySelectorAll('.meme-preset-btn').forEach(b => b.classList.remove('selected'));
+}
+
+document.getElementById('meme_url').addEventListener('input', function() {
+    const url = this.value.trim();
+    if (url) {
+        document.getElementById('memePreviewImg').src = url;
+        document.getElementById('memePreviewWrap').style.display = 'flex';
+    } else {
+        document.getElementById('memePreviewWrap').style.display = 'none';
+    }
+});
+
+// Init
+toggleLocation();
+{% if event and event.meme_url %}
+document.querySelectorAll('.meme-preset-btn').forEach(b => {
+    if (b.dataset.url === '{{ event.meme_url }}') b.classList.add('selected');
+});
+{% endif %}
+</script>
+{% endblock %}
