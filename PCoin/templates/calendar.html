@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Календарь событий — PCoin{% endblock %}
+
+{% block content %}
+<div class="calendar-layout">
+
+    <!-- ── LEFT SIDEBAR: mini-calendar + filters ── -->
+    <aside class="calendar-sidebar">
+        <div class="mini-calendar" id="miniCalendar">
+            <div class="mini-cal-header">
+                <button class="mini-cal-nav" id="prevMonth" aria-label="Предыдущий месяц">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <span class="mini-cal-title" id="miniCalTitle"></span>
+                <button class="mini-cal-nav" id="nextMonth" aria-label="Следующий месяц">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="mini-cal-weekdays">
+                <span>Пн</span><span>Вт</span><span>Ср</span>
+                <span>Чт</span><span>Пт</span>
+                <span class="weekend">Сб</span><span class="weekend">Вс</span>
+            </div>
+            <div class="mini-cal-days" id="miniCalDays"></div>
+        </div>
+
+        <div class="sidebar-filters">
+            <p class="filter-label">Категории</p>
+            <div class="filter-chips" id="categoryFilters">
+                <button class="chip chip-active" data-category="">Все</button>
+                {% for cat in categories %}
+                <button class="chip" data-category="{{ cat.id }}"
+                        style="--chip-color: {{ cat.color }};">
+                    <i class="fas {{ cat.icon }}"></i> {{ cat.name }}
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+    </aside>
+
+    <!-- ── MAIN: agenda list ── -->
+    <section class="agenda-panel">
+        <div class="agenda-header">
+            <h1 class="agenda-title">События</h1>
+            <a href="{{ url_for('main.admin_events', key='pcoin-admin-2024') }}"
+               class="btn-admin" title="Админка">
+                <i class="fas fa-cog"></i>
+            </a>
+        </div>
+
+        <div id="agendaList" class="agenda-list">
+            <div class="agenda-loading">
+                <i class="fas fa-spinner fa-spin"></i> Загрузка...
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- ── Event Detail Modal ── -->
+<div class="event-modal-overlay" id="eventModalOverlay" style="display:none;" role="dialog" aria-modal="true">
+    <div class="event-modal" id="eventModal">
+        <button class="modal-close" id="modalClose" aria-label="Закрыть">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-meme-banner" id="modalMemeBanner" style="display:none;">
+            <img id="modalMemeImg" src="" alt="meme">
+            <span class="modal-meme-title" id="modalMemeTitle"></span>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='calendar.js') }}"></script>
+{% endblock %}

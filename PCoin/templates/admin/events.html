@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block title %}Админка — События{% endblock %}
+
+{% block content %}
+<div class="admin-layout">
+    <div class="admin-header">
+        <div class="admin-header-left">
+            <a href="{{ url_for('main.calendar') }}" class="btn-ghost btn-sm">
+                <i class="fas fa-arrow-left"></i> На сайт
+            </a>
+            <h1 class="admin-title"><i class="fas fa-calendar-cog"></i> Управление событиями</h1>
+        </div>
+        <a href="{{ url_for('main.admin_event_new', key=key) }}" class="btn-primary">
+            <i class="fas fa-plus"></i> Создать событие
+        </a>
+    </div>
+
+    <div class="admin-stats">
+        <div class="stat-card">
+            <span class="stat-num">{{ events|length }}</span>
+            <span class="stat-label">Всего событий</span>
+        </div>
+        <div class="stat-card">
+            {% set upcoming = events|selectattr('start_datetime', 'gt', now)|list %}
+            <span class="stat-num">{{ upcoming|length }}</span>
+            <span class="stat-label">Предстоящих</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-num">{{ categories|length }}</span>
+            <span class="stat-label">Категорий</span>
+        </div>
+    </div>
+
+    {% if events %}
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Дата начала</th>
+                    <th>Категория</th>
+                    <th>Место</th>
+                    <th>Статус</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                <tr class="{% if event.start_datetime < now %}event-past{% endif %}">
+                    <td class="td-title">
+                        {% if event.meme_url %}
+                            <span class="meme-badge" title="Есть мем">🐸</span>
+                        {% endif %}
+                        {{ event.title }}
+                    </td>
+                    <td class="td-date">
+                        {{ event.start_datetime.strftime('%d %b %Y, %H:%M') }}
+                    </td>
+                    <td>
+                        {% if event.category %}
+                        <span class="cat-badge" style="background: {{ event.category.color }}22; color: {{ event.category.color }}; border-color: {{ event.category.color }};">
+                            <i class="fas {{ event.category.icon }}"></i>
+                            {{ event.category.name }}
+                        </span>
+                        {% else %}
+                        <span class="cat-badge cat-none">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="td-location">
+                        {% if event.is_online %}
+                            <i class="fas fa-wifi"></i> Онлайн
+                        {% elif event.location %}
+                            <i class="fas fa-map-marker-alt"></i> {{ event.location[:30] }}{% if event.location|length > 30 %}…{% endif %}
+                        {% else %}
+                            <span class="muted">—</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if event.start_datetime > now %}
+                            <span class="status-badge status-upcoming">Активно</span>
+                        {% else %}
+                            <span class="status-badge status-past">Прошло</span>
+                        {% endif %}
+                    </td>
+                    <td class="td-actions">
+                        <a href="{{ url_for('main.admin_event_edit', event_id=event.id, key=key) }}"
+                           class="btn-icon btn-edit" title="Редактировать">
+                            <i class="fas fa-pen"></i>
+                        </a>
+                        <form method="POST"
+                              action="{{ url_for('main.admin_event_delete', event_id=event.id, key=key) }}"
+                              style="display:inline;"
+                              onsubmit="return confirm('Удалить «{{ event.title }}»?')">
+                            <button type="submit" class="btn-icon btn-delete" title="Удалить">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="admin-empty">
+        <div class="admin-empty-icon">📭</div>
+        <p>Пока нет ни одного события.</p>
+        <a href="{{ url_for('main.admin_event_new', key=key) }}" class="btn-primary">
+            Создать первое событие
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
