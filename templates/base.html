@@ -1,35 +1,88 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Nova+Square&display=swap" rel="stylesheet">
+    <title>{% block title %}PCoin Events{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>{% block title %}PCoin{% endblock %}</title>
+    {% block head %}{% endblock %}
 </head>
 <body>
-    <div class="top-bar">
-        <div class="level">Level: Junior</div>
-        <div class="separator-small"></div>
-        <div class="rating">Рейтинг: 15</div>
-        <div class="separator-small"></div>
-        <button class="airdrop-button" onclick="window.location.href='/airdrop'">
-            <img src="/static/images/coin.png" alt="Coin" class="coin-icon"> Airdrop
-        </button>
-    </div>
 
-    <div class="content">
-        {% block content %}{% endblock %}
+<nav class="navbar">
+    <a href="{{ url_for('main.calendar') }}" class="navbar-brand">
+        <i class="fas fa-calendar-star"></i>
+        <span>PCoin Events</span>
+    </a>
+    <div class="navbar-actions">
+        <button class="btn-meme-day" id="memeDayBtn" title="Мем дня">🐸</button>
     </div>
+</nav>
 
-    <div class="footer-menu">
-        <a href="/"><i class="fas fa-gamepad"></i> Игра</a>
-        <a href="/skills"><i class="fas fa-brain"></i> Умения</a>
-        <a href="#"><i class="fas fa-users"></i> Друзья</a>
-        <a href="#"><i class="fas fa-tasks"></i> Задания</a>
+<main class="main-content">
+    {% block content %}{% endblock %}
+</main>
+
+<!-- Meme Popup Overlay -->
+<div class="meme-overlay" id="memeOverlay" style="display:none;">
+    <div class="meme-popup-inner" id="memePopupInner">
+        <img class="meme-img" id="memeImg" src="" alt="meme">
+        <div class="meme-caption" id="memeCaption"></div>
+        <div class="meme-skip">нажми чтобы пропустить</div>
     </div>
+</div>
 
+{% block scripts %}{% endblock %}
+<script>
+    // Meme day button
+    const PRESET_MEMES = [
+        { name: 'Surprised Pikachu',    url: 'https://i.imgflip.com/4t0m5.jpg' },
+        { name: 'This Is Fine',         url: 'https://i.imgflip.com/2cp1.jpg' },
+        { name: 'Stonks',               url: 'https://i.imgflip.com/3si4.jpg' },
+        { name: 'Drake Pointing',       url: 'https://i.imgflip.com/30b1gx.jpg' },
+        { name: 'Distracted Boyfriend', url: 'https://i.imgflip.com/1ur9b0.jpg' },
+        { name: 'Wait Its All X',       url: 'https://i.imgflip.com/46e43q.jpg' },
+        { name: 'Gigachad',             url: 'https://i.imgflip.com/54hjww.jpg' },
+        { name: 'Trollface',            url: 'https://i.imgflip.com/1otk96.jpg' },
+    ];
+
+    window.showMemePopup = function(memeUrl, caption, onClose, autoDismissMs) {
+        const overlay = document.getElementById('memeOverlay');
+        const img = document.getElementById('memeImg');
+        const cap = document.getElementById('memeCaption');
+        img.src = memeUrl;
+        cap.textContent = caption || '';
+        overlay.style.display = 'flex';
+        overlay.classList.remove('fade-out');
+        overlay.classList.add('fade-in');
+
+        let timer = null;
+        if (autoDismissMs) {
+            timer = setTimeout(dismiss, autoDismissMs);
+        }
+
+        function dismiss() {
+            clearTimeout(timer);
+            overlay.classList.remove('fade-in');
+            overlay.classList.add('fade-out');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                overlay.classList.remove('fade-out');
+                if (onClose) onClose();
+            }, 300);
+        }
+
+        overlay.onclick = dismiss;
+    };
+
+    document.getElementById('memeDayBtn').addEventListener('click', () => {
+        const m = PRESET_MEMES[Math.floor(Math.random() * PRESET_MEMES.length)];
+        showMemePopup(m.url, m.name.toUpperCase());
+    });
+</script>
 </body>
 </html>
