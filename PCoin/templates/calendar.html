@@ -2,67 +2,70 @@
 {% block title %}Календарь событий — PCoin{% endblock %}
 
 {% block content %}
-<div class="calendar-layout">
+<div class="cal-page">
 
-    <!-- ── LEFT SIDEBAR: mini-calendar + filters ── -->
-    <aside class="calendar-sidebar">
-        <div class="mini-calendar" id="miniCalendar">
-            <div class="mini-cal-header">
-                <button class="mini-cal-nav" id="prevMonth" aria-label="Предыдущий месяц">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <span class="mini-cal-title" id="miniCalTitle"></span>
-                <button class="mini-cal-nav" id="nextMonth" aria-label="Следующий месяц">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-            </div>
-            <div class="mini-cal-weekdays">
-                <span>Пн</span><span>Вт</span><span>Ср</span>
-                <span>Чт</span><span>Пт</span>
-                <span class="weekend">Сб</span><span class="weekend">Вс</span>
-            </div>
-            <div class="mini-cal-days" id="miniCalDays"></div>
+    <!-- ── Header ── -->
+    <div class="cal-top-bar">
+        <div class="cal-month-nav">
+            <button class="cal-nav-btn" id="prevMonth" aria-label="Предыдущий месяц">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <span class="cal-month-label" id="monthLabel"></span>
+            <button class="cal-nav-btn" id="nextMonth" aria-label="Следующий месяц">
+                <i class="fas fa-chevron-right"></i>
+            </button>
         </div>
 
-        <div class="sidebar-filters">
-            <p class="filter-label">Категории</p>
-            <div class="filter-chips" id="categoryFilters">
-                <button class="chip chip-active" data-category="">Все</button>
-                {% for cat in categories %}
-                <button class="chip" data-category="{{ cat.id }}"
-                        style="--chip-color: {{ cat.color }};">
-                    <i class="fas {{ cat.icon }}"></i> {{ cat.name }}
-                </button>
-                {% endfor %}
-            </div>
-        </div>
-    </aside>
-
-    <!-- ── MAIN: agenda list ── -->
-    <section class="agenda-panel">
-        <div class="agenda-header">
-            <h1 class="agenda-title">События</h1>
-            <a href="{{ url_for('main.admin_events', key='pcoin-admin-2024') }}"
-               class="btn-admin" title="Админка">
-                <i class="fas fa-cog"></i>
-            </a>
+        <div class="cal-filter-row" id="categoryFilters">
+            <button class="cal-chip cal-chip-active" data-category="">Все</button>
+            {% for cat in categories %}
+            <button class="cal-chip" data-category="{{ cat.id }}"
+                    style="--chip-color: {{ cat.color }};">
+                <i class="fas {{ cat.icon }}"></i> {{ cat.name }}
+            </button>
+            {% endfor %}
         </div>
 
-        <div id="agendaList" class="agenda-list">
-            <div class="agenda-loading">
-                <i class="fas fa-spinner fa-spin"></i> Загрузка...
-            </div>
+        <a href="{{ url_for('main.admin_events', key='pcoin-admin-2024') }}"
+           class="cal-admin-link" title="Админка">
+            <i class="fas fa-cog"></i>
+        </a>
+    </div>
+
+    <!-- ── Weekday headers ── -->
+    <div class="cal-weekdays">
+        <div class="cal-wd">Пн</div>
+        <div class="cal-wd">Вт</div>
+        <div class="cal-wd">Ср</div>
+        <div class="cal-wd">Чт</div>
+        <div class="cal-wd">Пт</div>
+        <div class="cal-wd cal-wd-weekend">Сб</div>
+        <div class="cal-wd cal-wd-weekend">Вс</div>
+    </div>
+
+    <!-- ── Day cards grid ── -->
+    <div class="cal-grid" id="calGrid">
+        <div class="cal-loading-msg">
+            <i class="fas fa-spinner fa-spin"></i> Загрузка...
         </div>
-    </section>
+    </div>
 
 </div>
 
-<!-- ── Event Detail Modal ── -->
-<div class="event-modal-overlay" id="eventModalOverlay" style="display:none;" role="dialog" aria-modal="true">
-    <div class="event-modal" id="eventModal">
-        <button class="modal-close" id="modalClose" aria-label="Закрыть">
+<!-- ── Day Modal ── -->
+<div class="day-modal-overlay" id="dayModalOverlay" style="display:none;">
+    <div class="day-modal" id="dayModal">
+        <button class="day-modal-close" id="dayModalClose">
             <i class="fas fa-times"></i>
         </button>
+        <div class="day-modal-content" id="dayModalContent"></div>
+    </div>
+</div>
+
+<!-- ── Event Detail Modal ── -->
+<div class="event-modal-overlay" id="eventModalOverlay" style="display:none;">
+    <div class="event-modal" id="eventModal">
+        <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
         <div class="modal-meme-banner" id="modalMemeBanner" style="display:none;">
             <img id="modalMemeImg" src="" alt="meme">
             <span class="modal-meme-title" id="modalMemeTitle"></span>
