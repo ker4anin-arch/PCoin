@@ -159,7 +159,7 @@
             const dateStr = `${currentYear}-${pad(currentMonth)}-${pad(d)}`;
             const isToday  = dateStr === todayStr;
             const dayEvents = getFilteredDayEvents(dateStr);
-            const bgIdx = ((currentYear * 100 + currentMonth) * 31 + d) % DAY_BACKGROUNDS.length;
+            const bgIdx = ((currentYear * 100 + currentMonth) * 31 + d) % CARD_GRADIENTS.length;
             html += dayCard(d, dateStr, isToday, dayEvents, bgIdx);
         }
 
