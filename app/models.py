@@ -1,69 +1,68 @@
+from datetime import datetime
 from .database import db
-from . import db
-
-from . import db
 
 
-class User(db.Model):
-    __tablename__ = 'users'
-
+class EventCategory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), nullable=False)
-    skills = db.relationship('UserSkill', back_populates='user')  # Связь с UserSkill
-
-    def __repr__(self):
-        return f'<User {self.name}>'
-
+    name = db.Column(db.String(50), nullable=False)
+    color = db.Column(db.String(7), default='#7C3AED')
+    icon = db.Column(db.String(50), default='fa-calendar')
+    meme_url = db.Column(db.Text, nullable=True)
+    events = db.relationship('Event', backref='category', lazy=True)
 
     def to_dict(self):
         return {
-            "telegram_id": self.telegram_id,
-            "name": self.name,
-            "level": self.level,
-            "coins": self.coins,
-            "energy": self.energy,
-            "income_per_hour": self.income_per_hour,
-            "friends": self.friends,
-            "skills": self.skills,
-            "tasks": self.tasks,
-            "experience": self.experience
+            'id': self.id,
+            'name': self.name,
+            'color': self.color,
+            'icon': self.icon,
+            'meme_url': self.meme_url,
         }
 
-def update_user_level(user):
-    if user.experience >= 100 and user.level == "Junior":
-        user.level = "Middle"
-    elif user.experience >= 200 and user.level == "Middle":
-        user.level = "Senior"
-    db.session.commit()
 
-class Task(db.Model):
+class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.String(255))
-    daily = db.Column(db.Boolean, default=False)  # Ежедневное задание или разовое
-    reward = db.Column(db.Integer, default=10)  # Награда в монетах
+    title = db.Column(db.String(150), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    start_datetime = db.Column(db.DateTime, nullable=False)
+    end_datetime = db.Column(db.DateTime, nullable=True)
+    location = db.Column(db.String(200), nullable=True)
+    is_online = db.Column(db.Boolean, default=False)
+    is_free = db.Column(db.Boolean, default=True)
+    category_id = db.Column(db.Integer, db.ForeignKey('event_category.id'), nullable=True)
+    meme_url = db.Column(db.Text, nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'start_datetime': self.start_datetime.isoformat() if self.start_datetime else None,
+            'end_datetime': self.end_datetime.isoformat() if self.end_datetime else None,
+            'location': self.location,
+            'is_online': self.is_online,
+            'is_free': self.is_free,
+            'category': self.category.to_dict() if self.category else None,
+            'meme_url': self.meme_url,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+        }
 
 
-class Skill(db.Model):
-    __tablename__ = 'skills'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-    income = db.Column(db.Integer, default=0)
-    level = db.Column(db.Integer, default=0)
-    cost = db.Column(db.Integer, nullable=False)
-    users = db.relationship('UserSkill', back_populates='skill')  # Связь с UserSkill
-
-    def __repr__(self):
-        return f'<Skill {self.name}>'
+DEFAULT_CATEGORIES = [
+    {'name': 'Встреча',  'color': '#7C3AED', 'icon': 'fa-users',
+     'meme_url': 'https://i.imgflip.com/1ur9b0.jpg'},
+    {'name': 'Обучение', 'color': '#2563EB', 'icon': 'fa-graduation-cap',
+     'meme_url': 'https://i.imgflip.com/2cp1.jpg'},
+    {'name': 'Конкурс',  'color': '#D97706', 'icon': 'fa-trophy',
+     'meme_url': 'https://i.imgflip.com/3si4.jpg'},
+    {'name': 'Аирдроп', 'color': '#059669', 'icon': 'fa-coins',
+     'meme_url': 'https://i.imgflip.com/4t0m5.jpg'},
+]
 
 
-class UserSkill(db.Model):
-    __tablename__ = 'user_skills'
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    skill_id = db.Column(db.Integer, db.ForeignKey('skills.id'), nullable=False)
-    user = db.relationship('User', back_populates='skills')
-    skill = db.relationship('Skill', back_populates='users')
-
+def seed_categories():
+    if EventCategory.query.count() == 0:
+        for cat in DEFAULT_CATEGORIES:
+            db.session.add(EventCategory(**cat))
+        db.session.commit()
