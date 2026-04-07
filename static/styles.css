@@ -7,22 +7,22 @@
 
 /* ── Custom Properties ── */
 :root {
-    --bg:         #111111;
-    --surface:    #1c1c1c;
-    --surface2:   #252525;
-    --surface3:   #2e2e2e;
-    --border:     rgba(255,255,255,0.07);
-    --primary:    #F5C518;
-    --primary-h:  #e0b400;
-    --accent:     #F5C518;
-    --text:       #f0f0f0;
-    --text-muted: #666666;
+    --bg:         #111109;
+    --surface:    #1c1c14;
+    --surface2:   #23231a;
+    --surface3:   #2c2c22;
+    --border:     rgba(139,191,48,0.12);
+    --primary:    #8BBF30;
+    --primary-h:  #7aaa28;
+    --accent:     #8BBF30;
+    --text:       #dde8b8;
+    --text-muted: #5a6840;
     --danger:     #ef4444;
-    --success:    #22c55e;
+    --success:    #8BBF30;
     --radius-sm:  8px;
     --radius:     16px;
     --radius-lg:  22px;
-    --shadow:     0 4px 28px rgba(0,0,0,0.55);
+    --shadow:     0 4px 28px rgba(0,0,0,0.7);
     --transition: 0.2s ease;
 }
 
@@ -325,25 +325,25 @@ img { max-width: 100%; }
 }
 .day-card-ghost:hover { transform: none; box-shadow: none; }
 
-/* Today: bold yellow fill */
+/* Today: army green fill */
 .day-card-today {
     background: var(--accent);
     border-color: var(--accent);
 }
 .day-card-today:hover {
-    box-shadow: 0 12px 36px rgba(245,197,24,0.35);
+    box-shadow: 0 12px 36px rgba(139,191,48,0.4);
 }
-.day-card-today .day-card-num  { color: #111; }
-.day-card-today .day-card-dot  { background: #111; }
-.day-card-today .day-card-event-name { color: #1a1a1a; }
-.day-card-today .day-card-more { color: rgba(0,0,0,0.45); }
+.day-card-today .day-card-num  { color: #111109; }
+.day-card-today .day-card-dot  { background: #111109; }
+.day-card-today .day-card-event-name { color: #1a1a10; }
+.day-card-today .day-card-more { color: rgba(0,0,0,0.5); }
 
-/* Has events: slightly brighter border */
+/* Has events: green border accent */
 .day-card-has-events:not(.day-card-today) {
-    border-color: rgba(255,255,255,0.13);
+    border-color: rgba(139,191,48,0.25);
 }
 .day-card-has-events:not(.day-card-today):hover {
-    box-shadow: 0 12px 36px rgba(245,197,24,0.15);
+    box-shadow: 0 12px 36px rgba(139,191,48,0.18);
 }
 
 /* ── Card top: number + dot ── */
