@@ -5,41 +5,6 @@
 (function () {
     'use strict';
 
-    // ── NFT-style gradients for day cards ──
-    const CARD_GRADIENTS = [
-        'linear-gradient(135deg, #667eea, #764ba2)',
-        'linear-gradient(135deg, #f093fb, #f5576c)',
-        'linear-gradient(135deg, #4facfe, #00f2fe)',
-        'linear-gradient(135deg, #43e97b, #38f9d7)',
-        'linear-gradient(135deg, #fa709a, #fee140)',
-        'linear-gradient(135deg, #a18cd1, #fbc2eb)',
-        'linear-gradient(135deg, #fccb90, #d57eeb)',
-        'linear-gradient(135deg, #e0c3fc, #8ec5fc)',
-        'linear-gradient(135deg, #f6d365, #fda085)',
-        'linear-gradient(135deg, #96fbc4, #f9f586)',
-        'linear-gradient(135deg, #84fab0, #8fd3f4)',
-        'linear-gradient(135deg, #a1c4fd, #c2e9fb)',
-        'linear-gradient(135deg, #fddb92, #d1fdff)',
-        'linear-gradient(135deg, #ff9a9e, #fad0c4)',
-        'linear-gradient(135deg, #a8edea, #fed6e3)',
-        'linear-gradient(135deg, #ffecd2, #fcb69f)',
-        'linear-gradient(135deg, #ff8177, #b12a5b)',
-        'linear-gradient(135deg, #c2e9fb, #81d4fa)',
-        'linear-gradient(135deg, #e0f7fa, #b2ebf2)',
-        'linear-gradient(135deg, #f3e7e9, #e3eeff)',
-        'linear-gradient(135deg, #d4fc79, #96e6a1)',
-        'linear-gradient(135deg, #f77062, #fe5196)',
-        'linear-gradient(135deg, #c471ed, #f64f59)',
-        'linear-gradient(135deg, #12c2e9, #c471ed)',
-        'linear-gradient(135deg, #f64f59, #c471ed)',
-        'linear-gradient(135deg, #43cbff, #9708cc)',
-        'linear-gradient(135deg, #ee9ca7, #ffdde1)',
-        'linear-gradient(135deg, #2af598, #009efd)',
-        'linear-gradient(135deg, #ffd89b, #19547b)',
-        'linear-gradient(135deg, #a8caba, #5d4157)',
-        'linear-gradient(135deg, #e96443, #904e95)',
-    ];
-
     // ── Funny emojis to show in card art ──
     const CARD_EMOJIS = [
         '🚀','🎮','🏆','💎','🎯','🔥','⚡','🌈',
@@ -159,7 +124,7 @@
             const dateStr = `${currentYear}-${pad(currentMonth)}-${pad(d)}`;
             const isToday  = dateStr === todayStr;
             const dayEvents = getFilteredDayEvents(dateStr);
-            const bgIdx = ((currentYear * 100 + currentMonth) * 31 + d) % CARD_GRADIENTS.length;
+            const bgIdx = ((currentYear * 100 + currentMonth) * 31 + d) % CARD_EMOJIS.length;
             html += dayCard(d, dateStr, isToday, dayEvents, bgIdx);
         }
 
@@ -189,7 +154,6 @@
 
     // ── Day card HTML (NFT style) ──
     function dayCard(day, dateStr, isToday, events, idx) {
-        const gradient = CARD_GRADIENTS[idx % CARD_GRADIENTS.length];
         const emoji    = CARD_EMOJIS[idx % CARD_EMOJIS.length];
         const hasEvents = events.length > 0;
 
@@ -225,7 +189,7 @@
 
         return `
         <div class="${classes}" data-date="${dateStr}" data-day="${day}">
-            <div class="day-card-art" style="background:${gradient};">
+            <div class="day-card-art">
                 <span class="day-card-emoji">${emoji}</span>
             </div>
             <div class="day-card-info">
@@ -240,12 +204,11 @@
     }
 
     function ghostCard(day, month, year) {
-        const idx = ((year * 100 + month) * 31 + day) % CARD_GRADIENTS.length;
-        const gradient = CARD_GRADIENTS[idx];
-        const emoji    = CARD_EMOJIS[idx % CARD_EMOJIS.length];
+        const idx = ((year * 100 + month) * 31 + day) % CARD_EMOJIS.length;
+        const emoji    = CARD_EMOJIS[idx];
         return `
         <div class="day-card day-card-ghost">
-            <div class="day-card-art" style="background:${gradient};">
+            <div class="day-card-art">
                 <span class="day-card-emoji">${emoji}</span>
             </div>
             <div class="day-card-info">

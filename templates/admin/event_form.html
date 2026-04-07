@@ -5,7 +5,7 @@
 <div class="admin-layout">
     <div class="admin-header">
         <div class="admin-header-left">
-            <a href="{{ url_for('main.admin_events', key=key) }}" class="btn-ghost btn-sm">
+            <a href="{{ url_for('main.admin_events') }}" class="btn-ghost btn-sm">
                 <i class="fas fa-arrow-left"></i> Назад
             </a>
             <h1 class="admin-title">
@@ -13,6 +13,9 @@
                 {{ 'Редактировать событие' if event else 'Новое событие' }}
             </h1>
         </div>
+        <a href="{{ url_for('main.admin_logout') }}" class="btn-ghost btn-sm">
+            <i class="fas fa-sign-out-alt"></i> Выйти
+        </a>
     </div>
 
     <form method="POST" class="event-form">
@@ -53,6 +56,42 @@
             </div>
         </div>
 
+        <!-- Recurrence -->
+        <div class="form-group">
+            <label class="form-label">
+                <i class="fas fa-redo" style="color: var(--primary);"></i>
+                Повторение
+            </label>
+            <div class="recurrence-options" id="recurrenceOptions">
+                {% for value, label in recurrence_options.items() %}
+                <label class="rec-option">
+                    <input type="radio" name="recurrence" value="{{ value }}"
+                           {% if (event and event.recurrence == value) or (not event and value == 'none') %}checked{% endif %}
+                           onchange="toggleRecEndDate()">
+                    <span class="rec-option-label">
+                        {% if value == 'none' %}🚫
+                        {% elif value == 'daily' %}📅
+                        {% elif value == 'weekly' %}📆
+                        {% elif value == 'monthly' %}🗓️
+                        {% elif value == 'yearly' %}🎆
+                        {% endif %}
+                        {{ label }}
+                    </span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Recurrence end date (shown only when recurrence != none) -->
+        <div class="form-group" id="recEndGroup"
+             style="{{ '' if (event and event.recurrence and event.recurrence != 'none') else 'display:none;' }}">
+            <label class="form-label" for="recurrence_end_date">
+                Повторять до <span class="muted">(необязательно)</span>
+            </label>
+            <input type="date" id="recurrence_end_date" name="recurrence_end_date" class="form-input"
+                   value="{{ event.recurrence_end_date.strftime('%Y-%m-%d') if event and event.recurrence_end_date else '' }}">
+        </div>
+
         <!-- Online toggle -->
         <div class="form-group form-check-group">
             <label class="form-check">
@@ -90,7 +129,7 @@
             <label class="form-label">
                 🐸 Мем события <span class="muted">(необязательно)</span>
             </label>
-            <p class="form-hint">Мем будет показан пользователям при открытии события — для хайпа!</p>
+            <p class="form-hint">Мем будет показан при открытии события — для хайпа!</p>
 
             <input type="url" id="meme_url" name="meme_url" class="form-input"
                    value="{{ event.meme_url if event else '' }}"
@@ -125,9 +164,7 @@
                 <i class="fas fa-save"></i>
                 {{ 'Сохранить изменения' if event else 'Создать событие' }}
             </button>
-            <a href="{{ url_for('main.admin_events', key=key) }}" class="btn-ghost btn-lg">
-                Отмена
-            </a>
+            <a href="{{ url_for('main.admin_events') }}" class="btn-ghost btn-lg">Отмена</a>
         </div>
     </form>
 </div>
@@ -135,12 +172,14 @@
 <script>
 function toggleLocation() {
     const online = document.getElementById('isOnline').checked;
-    const locGroup = document.getElementById('locationGroup');
-    const locInput = document.getElementById('location');
-    locGroup.style.opacity = online ? '0.4' : '1';
-    locInput.placeholder = online
+    document.getElementById('location').placeholder = online
         ? 'Ссылка на трансляцию (Zoom, YouTube...)'
         : 'Например: Москва, ул. Пушкина, 1';
+}
+
+function toggleRecEndDate() {
+    const val = document.querySelector('input[name="recurrence"]:checked').value;
+    document.getElementById('recEndGroup').style.display = val === 'none' ? 'none' : '';
 }
 
 function selectMeme(url) {
@@ -167,7 +206,6 @@ document.getElementById('meme_url').addEventListener('input', function() {
     }
 });
 
-// Init
 toggleLocation();
 {% if event and event.meme_url %}
 document.querySelectorAll('.meme-preset-btn').forEach(b => {

@@ -10,9 +10,14 @@
             </a>
             <h1 class="admin-title"><i class="fas fa-calendar-cog"></i> Управление событиями</h1>
         </div>
-        <a href="{{ url_for('main.admin_event_new', key=key) }}" class="btn-primary">
-            <i class="fas fa-plus"></i> Создать событие
-        </a>
+        <div style="display:flex;gap:10px;align-items:center;">
+            <a href="{{ url_for('main.admin_event_new') }}" class="btn-primary">
+                <i class="fas fa-plus"></i> Создать событие
+            </a>
+            <a href="{{ url_for('main.admin_logout') }}" class="btn-ghost btn-sm">
+                <i class="fas fa-sign-out-alt"></i> Выйти
+            </a>
+        </div>
     </div>
 
     <div class="admin-stats">
@@ -24,6 +29,11 @@
             {% set upcoming = events|selectattr('start_datetime', 'gt', now)|list %}
             <span class="stat-num">{{ upcoming|length }}</span>
             <span class="stat-label">Предстоящих</span>
+        </div>
+        <div class="stat-card">
+            {% set recurring = events|selectattr('recurrence', 'ne', 'none')|list %}
+            <span class="stat-num">{{ recurring|length }}</span>
+            <span class="stat-label">Повторяющихся</span>
         </div>
         <div class="stat-card">
             <span class="stat-num">{{ categories|length }}</span>
@@ -38,6 +48,7 @@
                 <tr>
                     <th>Название</th>
                     <th>Дата начала</th>
+                    <th>Повторение</th>
                     <th>Категория</th>
                     <th>Место</th>
                     <th>Статус</th>
@@ -48,32 +59,29 @@
                 {% for event in events %}
                 <tr class="{% if event.start_datetime < now %}event-past{% endif %}">
                     <td class="td-title">
-                        {% if event.meme_url %}
-                            <span class="meme-badge" title="Есть мем">🐸</span>
-                        {% endif %}
+                        {% if event.meme_url %}<span class="meme-badge" title="Есть мем">🐸</span>{% endif %}
                         {{ event.title }}
                     </td>
-                    <td class="td-date">
-                        {{ event.start_datetime.strftime('%d %b %Y, %H:%M') }}
+                    <td class="td-date">{{ event.start_datetime.strftime('%d %b %Y, %H:%M') }}</td>
+                    <td>
+                        {% if event.recurrence != 'none' %}
+                        <span class="rec-badge">
+                            <i class="fas fa-redo"></i>
+                            {{ recurrence_labels.get(event.recurrence, event.recurrence) }}
+                        </span>
+                        {% else %}<span class="muted" style="color:var(--text-muted)">—</span>{% endif %}
                     </td>
                     <td>
                         {% if event.category %}
-                        <span class="cat-badge" style="background: {{ event.category.color }}22; color: {{ event.category.color }}; border-color: {{ event.category.color }};">
-                            <i class="fas {{ event.category.icon }}"></i>
-                            {{ event.category.name }}
+                        <span class="cat-badge" style="background:{{ event.category.color }}22;color:{{ event.category.color }};border-color:{{ event.category.color }};">
+                            <i class="fas {{ event.category.icon }}"></i> {{ event.category.name }}
                         </span>
-                        {% else %}
-                        <span class="cat-badge cat-none">—</span>
-                        {% endif %}
+                        {% else %}<span class="cat-badge cat-none">—</span>{% endif %}
                     </td>
                     <td class="td-location">
-                        {% if event.is_online %}
-                            <i class="fas fa-wifi"></i> Онлайн
-                        {% elif event.location %}
-                            <i class="fas fa-map-marker-alt"></i> {{ event.location[:30] }}{% if event.location|length > 30 %}…{% endif %}
-                        {% else %}
-                            <span class="muted">—</span>
-                        {% endif %}
+                        {% if event.is_online %}<i class="fas fa-wifi"></i> Онлайн
+                        {% elif event.location %}<i class="fas fa-map-marker-alt"></i> {{ event.location[:28] }}{% if event.location|length > 28 %}…{% endif %}
+                        {% else %}<span style="color:var(--text-muted)">—</span>{% endif %}
                     </td>
                     <td>
                         {% if event.start_datetime > now %}
@@ -83,14 +91,14 @@
                         {% endif %}
                     </td>
                     <td class="td-actions">
-                        <a href="{{ url_for('main.admin_event_edit', event_id=event.id, key=key) }}"
+                        <a href="{{ url_for('main.admin_event_edit', event_id=event.id) }}"
                            class="btn-icon btn-edit" title="Редактировать">
                             <i class="fas fa-pen"></i>
                         </a>
                         <form method="POST"
-                              action="{{ url_for('main.admin_event_delete', event_id=event.id, key=key) }}"
+                              action="{{ url_for('main.admin_event_delete', event_id=event.id) }}"
                               style="display:inline;"
-                              onsubmit="return confirm('Удалить «{{ event.title }}»?')">
+                              onsubmit="return confirm('Удалить {{ event.title }}?')">
                             <button type="submit" class="btn-icon btn-delete" title="Удалить">
                                 <i class="fas fa-trash"></i>
                             </button>
@@ -105,9 +113,7 @@
     <div class="admin-empty">
         <div class="admin-empty-icon">📭</div>
         <p>Пока нет ни одного события.</p>
-        <a href="{{ url_for('main.admin_event_new', key=key) }}" class="btn-primary">
-            Создать первое событие
-        </a>
+        <a href="{{ url_for('main.admin_event_new') }}" class="btn-primary">Создать первое событие</a>
     </div>
     {% endif %}
 </div>
