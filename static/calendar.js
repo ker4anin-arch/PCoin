@@ -5,14 +5,6 @@
 (function () {
     'use strict';
 
-    // ── Funny emojis to show in card art ──
-    const CARD_EMOJIS = [
-        '🚀','🎮','🏆','💎','🎯','🔥','⚡','🌈',
-        '🎪','🎭','🎨','🎲','🎸','🤖','👾','🦄',
-        '🌊','🏄','🎡','🎢','🎠','🎪','🌟','💫',
-        '🧩','🎯','🏹','⚔️','🛡️','🌺','🍀','🦋',
-    ];
-
     const MONTHS_RU = [
         'Январь','Февраль','Март','Апрель','Май','Июнь',
         'Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'
@@ -116,7 +108,7 @@
             const d = daysInPrev - i;
             const m = currentMonth - 1 <= 0 ? 12 : currentMonth - 1;
             const y = currentMonth - 1 <= 0 ? currentYear - 1 : currentYear;
-            html += ghostCard(d, m, y);
+            html += ghostCard(d);
         }
 
         // current month cards
@@ -124,8 +116,7 @@
             const dateStr = `${currentYear}-${pad(currentMonth)}-${pad(d)}`;
             const isToday  = dateStr === todayStr;
             const dayEvents = getFilteredDayEvents(dateStr);
-            const bgIdx = ((currentYear * 100 + currentMonth) * 31 + d) % CARD_EMOJIS.length;
-            html += dayCard(d, dateStr, isToday, dayEvents, bgIdx);
+            html += dayCard(d, dateStr, isToday, dayEvents);
         }
 
         // next month ghost cells (fill to complete last row)
@@ -133,9 +124,7 @@
         const remainder  = totalCells % 7;
         const nextCount  = remainder === 0 ? 0 : 7 - remainder;
         for (let d = 1; d <= nextCount; d++) {
-            const m = currentMonth + 1 > 12 ? 1 : currentMonth + 1;
-            const y = currentMonth + 1 > 12 ? currentYear + 1 : currentYear;
-            html += ghostCard(d, m, y);
+            html += ghostCard(d);
         }
 
         grid.innerHTML = html;
@@ -152,72 +141,42 @@
         return evs.filter(e => e.category && String(e.category.id) === String(activeCategoryId));
     }
 
-    // ── Day card HTML (NFT style) ──
-    function dayCard(day, dateStr, isToday, events, idx) {
-        const emoji    = CARD_EMOJIS[idx % CARD_EMOJIS.length];
+    // ── Day card HTML ──
+    function dayCard(day, dateStr, isToday, events) {
         const hasEvents = events.length > 0;
 
         const classes = [
             'day-card',
-            isToday    ? 'day-card-today'      : '',
-            hasEvents  ? 'day-card-has-events'  : '',
+            isToday   ? 'day-card-today'     : '',
+            hasEvents ? 'day-card-has-events' : '',
         ].filter(Boolean).join(' ');
 
-        // First event info for the info strip
         const firstEv = hasEvents ? events[0] : null;
-        const catColor = firstEv && firstEv.category ? firstEv.category.color : '#7C3AED';
-        const catIcon  = firstEv && firstEv.category ? firstEv.category.icon  : 'fa-calendar';
-        const catName  = firstEv && firstEv.category ? firstEv.category.name  : '';
 
-        // Divider bars (NFT style: 3 bars, first colored)
-        const divider = `<div class="day-card-divider">
-            <span style="background:${hasEvents ? catColor : 'rgba(255,255,255,0.15)'}"></span>
-            <span></span><span></span>
-        </div>`;
-
-        const infoBottom = hasEvents
-            ? `${catName
-                ? `<div class="day-card-cat-badge" style="background:${catColor}88;">
-                     <i class="fas ${catIcon}"></i> ${escHtml(catName)}
-                   </div>`
-                : ''}
-               <div class="day-card-event-name">${escHtml(firstEv.title)}</div>
+        const foot = hasEvents
+            ? `<div class="day-card-event-name">${escHtml(firstEv.title)}</div>
                ${events.length > 1
-                    ? `<div class="day-card-empty-label">+${events.length - 1} ещё</div>`
-                    : ''}`
-            : `<div class="day-card-empty-label">—</div>`;
+                   ? `<div class="day-card-more">+${events.length - 1} ещё</div>`
+                   : ''}`
+            : '';
 
         return `
         <div class="${classes}" data-date="${dateStr}" data-day="${day}">
-            <div class="day-card-art">
-                <span class="day-card-emoji">${emoji}</span>
+            <div class="day-card-head">
+                <span class="day-card-num">${day}</span>
+                ${hasEvents ? '<span class="day-card-dot"></span>' : ''}
             </div>
-            <div class="day-card-info">
-                <div class="day-card-num-row">
-                    <span class="day-card-num">${day}</span>
-                    ${isToday ? '<span class="day-card-today-badge">Today</span>' : ''}
-                </div>
-                ${divider}
-                ${infoBottom}
-            </div>
+            <div class="day-card-foot">${foot}</div>
         </div>`;
     }
 
-    function ghostCard(day, month, year) {
-        const idx = ((year * 100 + month) * 31 + day) % CARD_EMOJIS.length;
-        const emoji    = CARD_EMOJIS[idx];
+    function ghostCard(day) {
         return `
         <div class="day-card day-card-ghost">
-            <div class="day-card-art">
-                <span class="day-card-emoji">${emoji}</span>
+            <div class="day-card-head">
+                <span class="day-card-num">${day}</span>
             </div>
-            <div class="day-card-info">
-                <div class="day-card-num-row">
-                    <span class="day-card-num">${day}</span>
-                </div>
-                <div class="day-card-divider"><span></span><span></span><span></span></div>
-                <div class="day-card-empty-label">—</div>
-            </div>
+            <div class="day-card-foot"></div>
         </div>`;
     }
 
